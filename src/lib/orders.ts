@@ -1,5 +1,5 @@
 import { isFirebaseConfigured } from '@/lib/firebase/client'
-import { createOrder as createFirestoreOrder } from '@/lib/firebase/orders'
+import { createOrder as createFirestoreOrder, fetchOrdersByUser } from '@/lib/firebase/orders'
 import type { Order } from '@/types/order'
 
 // Saves an order to Firestore when configured. Falls back to a local console
@@ -11,4 +11,11 @@ export async function placeOrder(order: Order): Promise<string> {
   }
   console.warn('[LXH] Firestore not configured — order was not persisted:', order)
   return `LOCAL-${Date.now()}`
+}
+
+export async function getOrderHistory(userId: string): Promise<Order[]> {
+  if (isFirebaseConfigured) {
+    return fetchOrdersByUser(userId)
+  }
+  return []
 }

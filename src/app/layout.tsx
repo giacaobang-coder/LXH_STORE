@@ -3,6 +3,7 @@ import { Jost, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { AuthProvider } from '@/hooks/useAuth'
 
 const jost = Jost({
   variable: '--font-sans',
@@ -35,11 +36,13 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={`${jost.variable} ${playfair.variable} antialiased bg-noir text-white`}>
-        <Header />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   )

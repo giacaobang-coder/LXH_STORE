@@ -1,13 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCart } from '@/hooks/useCart'
+import { useAuth } from '@/hooks/useAuth'
 import { placeOrder } from '@/lib/orders'
 import { CheckCircle } from 'lucide-react'
 
 export default function CheckoutPage() {
   const { items, getTotalPrice, clearCart } = useCart()
+  const { user } = useAuth()
   const [step, setStep] = useState<'info' | 'payment' | 'success'>('info')
   const [orderId, setOrderId] = useState('')
   const [formData, setFormData] = useState({
@@ -18,6 +20,16 @@ export default function CheckoutPage() {
     city: '',
     district: '',
   })
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || user.displayName || '',
+        email: prev.email || user.email || '',
+      }))
+    }
+  }, [user])
   const [paymentMethod, setPaymentMethod] = useState<'momo' | 'cod'>('momo')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -56,6 +68,7 @@ export default function CheckoutPage() {
 
     try {
       const id = await placeOrder({
+        userId: user?.uid ?? null,
         customer: formData,
         items,
         total: finalTotal,

@@ -11,6 +11,7 @@ export interface OrderCustomer {
 
 export interface Order {
   id?: string
+  userId?: string | null
   customer: OrderCustomer
   items: CartItem[]
   total: number

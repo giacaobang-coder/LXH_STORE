@@ -4,10 +4,12 @@ import Link from 'next/link'
 import { ShoppingBag, Menu, X, Heart, User } from 'lucide-react'
 import { useState } from 'react'
 import { useCart } from '@/hooks/useCart'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { items } = useCart()
+  const { user } = useAuth()
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0)
 
   return (
@@ -37,9 +39,13 @@ export default function Header() {
             <button className="p-2 hover:text-gold transition-colors">
               <Heart size={18} strokeWidth={1.5} />
             </button>
-            <button className="p-2 hover:text-gold transition-colors">
-              <User size={18} strokeWidth={1.5} />
-            </button>
+            <Link
+              href={user ? '/account' : '/login'}
+              className="p-2 hover:text-gold transition-colors"
+              title={user ? 'Tài khoản' : 'Đăng nhập'}
+            >
+              <User size={18} strokeWidth={1.5} className={user ? 'text-gold' : ''} />
+            </Link>
             <Link
               href="/cart"
               className="p-2 hover:text-gold transition-colors relative"
