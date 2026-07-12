@@ -16,10 +16,8 @@ const playfair = Playfair_Display({
   weight: ['400', '600', '700'],
 })
 
-export const metadataBase = new URL('https://lxh-store.vercel.app')
-
 export const metadata: Metadata = {
-  metadataBase,
+  metadataBase: new URL('https://lxh-store.vercel.app'),
   title: 'LXH — Maison de Mode',
   description: 'LXH — Thời trang cao cấp. Di sản, thủ công và sự sang trọng vượt thời gian.',
   openGraph: {
