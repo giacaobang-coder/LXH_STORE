@@ -1,212 +1,63 @@
-# LXH Fashion Store - Website Thương Mại Điện Tử
+# LXH — Maison de Mode
 
-Website thời trang cao cấp cho thương hiệu **LXH** - được xây dựng bằng **Next.js 14**, **React**, **TypeScript**, **Tailwind CSS**, và **Zustand**.
+Website thương mại điện tử thời trang cao cấp. Next.js 14 (App Router) + TypeScript + Tailwind CSS + Firebase (Firestore).
 
-## 🎯 Tính Năng
-
-✅ **Catalog Sản Phẩm**: Hiển thị 100+ sản phẩm thời trang cao cấp
-✅ **Lọc & Tìm Kiếm**: Lọc theo danh mục, sắp xếp theo giá/đánh giá
-✅ **Chi Tiết Sản Phẩm**: Xem đầy đủ thông tin, chọn màu/kích cỡ
-✅ **Giỏ Hàng**: Quản lý giỏ hàng với Zustand (lưu trữ local)
-✅ **Thanh Toán**: Hỗ trợ Momo và COD
-✅ **Responsive Design**: Tối ưu hóa cho mobile, tablet, desktop
-✅ **Design Hệ Thống**: Màu sắc tối giản, typography sang trọng
-
-## 📦 Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + CSS Modules
-- **State Management**: Zustand
-- **UI Components**: Radix UI + Lucide Icons
-- **Image**: Next.js Image Optimization
-- **Icons**: Lucide React (18+ icons)
-
-## 🚀 Cài Đặt & Chạy
-
-### Yêu Cầu
-- Node.js 18+ 
-- npm hoặc yarn
-
-### Bước 1: Cài Đặt Dependencies
-```bash
-cd LXH-fashion-website
-npm install
-```
-
-### Bước 2: Chạy Development Server
-```bash
-npm run dev
-```
-
-Mở trình duyệt: **http://localhost:3000**
-
-### Bước 3: Build cho Production
-```bash
-npm run build
-npm run start
-```
-
-## 📂 Cấu Trúc Thư Mục
+## Cấu Trúc Dự Án
 
 ```
 LXH-fashion-website/
-├── app/
-│   ├── layout.tsx              # Root layout
-│   ├── page.tsx                # Trang chủ
-│   ├── globals.css             # Tailwind config
-│   ├── products/
-│   │   ├── page.tsx            # Danh sách sản phẩm
-│   │   └── [id]/
-│   │       └── page.tsx        # Chi tiết sản phẩm
-│   ├── cart/
-│   │   └── page.tsx            # Giỏ hàng
-│   └── checkout/
-│       └── page.tsx            # Thanh toán
-├── components/
-│   ├── Header.tsx              # Header & Navigation
-│   ├── Footer.tsx              # Footer
-│   ├── Hero.tsx                # Hero section
-│   ├── ProductCard.tsx         # Product card component
-│   ├── ProductGrid.tsx         # Product grid
-│   └── CTA.tsx                 # Call-to-action
-├── hooks/
-│   └── useCart.ts              # Cart state management
-├── lib/
-│   └── products.ts             # Fake product data
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
+├── src/
+│   ├── app/                 # Routes (Next.js App Router) — pages & layouts
+│   ├── components/          # Presentational UI components
+│   ├── hooks/                # Client-side state (useCart — Zustand)
+│   ├── lib/                  # Data-access layer (frontend-facing)
+│   │   ├── firebase/          client.ts (Firebase client SDK), products.ts, orders.ts
+│   │   ├── products.ts        public API: Firestore if configured, else mock fallback
+│   │   ├── mock-products.ts   generated fallback catalog (real photos via LoremFlickr)
+│   │   ├── orders.ts          order persistence (Firestore or console fallback)
+│   │   └── constants.ts       category/subcategory taxonomy (static config)
+│   ├── server/               # Server/admin-only code — never imported by the client
+│   │   └── firebase/admin.ts  Firebase Admin SDK (used by scripts/seed.ts)
+│   ├── types/                 Shared TypeScript interfaces (Product, Order)
+│   └── styles/                (reserved for future shared style modules)
+├── scripts/
+│   └── seed.ts               # Populates Firestore with the product catalog
+├── docs/                     # Setup guides
+│   ├── FIREBASE_SETUP.md      How to connect a real database (5 min)
+│   ├── SETUP.md               macOS / VS Code / GitHub / Hostinger walkthrough
+│   └── QUICK_START.md
+├── .env.example               Environment variable template
 ├── next.config.js
-└── .gitignore
+├── tailwind.config.ts
+└── tsconfig.json
 ```
 
-## 🎨 Design System
+**Frontend / Backend / Database separation:**
+- **Frontend** — `src/app`, `src/components`, `src/hooks` (client-rendered UI)
+- **Backend** — `src/lib` (data-access services called from the frontend) + `src/server` (privileged, server-only Firebase Admin access used only by `scripts/seed.ts`)
+- **Database** — Firebase Firestore, collections `products` and `orders`
 
-### Màu Sắc (Minimalist - Sang Trọng)
-- **Primary**: Brown (#92804d) - Chính
-- **Accent**: Beige (#8b8076) - Accent
-- **Base**: White + Light Gray - Nền
+## Chạy Local
 
-### Typography
-- **Sans**: Geist Font
-- **Headings**: Bold, tracking-tight
-- **Body**: 16px, line-height 1.5
-
-## 📄 Pages
-
-| Đường dẫn | Mô tả |
-|----------|-------|
-| `/` | Trang chủ với hero & sản phẩm nổi bật |
-| `/products` | Danh sách tất cả sản phẩm |
-| `/products/[id]` | Chi tiết sản phẩm, chọn màu/kích cỡ |
-| `/cart` | Giỏ hàng của người dùng |
-| `/checkout` | Thanh toán & nhập thông tin giao hàng |
-
-## 🛒 Giỏ Hàng
-
-Sử dụng **Zustand** để quản lý state giỏ hàng:
-- Lưu trữ tự động vào localStorage
-- Persist giữa các session
-- Thêm/xóa/cập nhật số lượng
-
-```typescript
-import { useCart } from '@/hooks/useCart'
-
-const { items, addItem, removeItem, getTotalPrice } = useCart()
+```bash
+npm install
+npm run dev
 ```
 
-## 💰 Sản Phẩm Fake
+Mở http://localhost:3000 — hoạt động ngay với dữ liệu mẫu (không cần Firebase).
 
-Dữ liệu sản phẩm được tạo ngẫu nhiên trong `lib/products.ts`:
-- 100 sản phẩm đa dạng
-- Giá từ 500K - 5M VND
-- Danh mục: Women, Men, Accessories
-- Rating & Reviews ngẫu nhiên
+## Kết Nối Database Thật
 
-## 📱 Responsive
+Xem [docs/FIREBASE_SETUP.md](docs/FIREBASE_SETUP.md) — 5 phút để chuyển từ mock data sang Firestore.
 
-- **Mobile**: < 768px
-- **Tablet**: 768px - 1024px
-- **Desktop**: ≥ 1024px
-
-## 🚀 Deploy lên Hostinger
-
-### Cách 1: Dùng cPanel (Recommended)
-
-1. **Build project locally**:
-   ```bash
-   npm run build
-   ```
-
-2. **Upload qua FTP/SFTP**:
-   - Cài FileZilla hoặc WinSCP
-   - Upload thư mục `LXH-fashion-website` lên public_html
-
-3. **Chạy trên Hostinger**:
-   - SSH vào server
-   ```bash
-   cd ~/public_html/LXH-fashion-website
-   npm install
-   npm start
-   ```
-
-### Cách 2: Dùng GitHub + Vercel (Easiest)
-
-1. **Push lên GitHub**:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
-
-2. **Connect Vercel**:
-   - Vào vercel.com
-   - Import project từ GitHub
-   - Deploy automatically
-
-3. **Custom Domain trên Hostinger**:
-   - Cập nhật nameservers trỏ về Vercel
-
-## 🔧 Configuration
-
-### Tailwind Config (`tailwind.config.ts`)
-```typescript
-colors: {
-  primary: { ... },    // Brown tones
-  accent: { ... },     // Beige tones
-}
+```bash
+npm run seed   # đẩy 100 sản phẩm mẫu vào Firestore, sau khi đã cấu hình .env.local
 ```
 
-### Next.js Config (`next.config.js`)
-```javascript
-images: {
-  remotePatterns: [{ protocol: 'https', hostname: '**' }]
-}
-```
+## Design System
 
-## 📚 API Endpoints (Frontend Only)
+Phong cách **Dark Luxury** — nền đen (`noir`), điểm nhấn vàng (`gold`), font serif (Playfair Display) cho tiêu đề, font sans (Jost) cho nội dung. Xem `tailwind.config.ts` và `src/app/globals.css`.
 
-Hiện tại là **SSR/SSG**, không có backend API riêng.
-Dữ liệu được mock trong `lib/products.ts`.
+## Deploy
 
-## 🔐 Environment Variables
-
-Tạo `.env.local`:
-```
-NEXT_PUBLIC_API_URL=https://your-api.com
-```
-
-## 📧 Contact
-
-- Email: bang.gia@momo.vn
-- Website: https://lxhfashion.com (future)
-
-## 📄 License
-
-© 2024 LXH Fashion. All rights reserved.
-
----
-
-**Built with ❤️ using Next.js**
+Push lên `main` → Vercel tự động build & deploy. Xem [docs/SETUP.md](docs/SETUP.md) để biết chi tiết GitHub + Vercel + Hostinger.

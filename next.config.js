@@ -2,10 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  skipBuildStats: true,
-  experimental: {
-    staticGenerationRetryCount: 1,
-  },
   images: {
     unoptimized: true,
     remotePatterns: [

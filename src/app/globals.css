@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-noir text-white font-sans;
+  }
+
+  h1, h2, h3 {
+    @apply font-serif tracking-tight;
+  }
+
+  h1 {
+    @apply text-5xl font-normal;
+  }
+
+  h2 {
+    @apply text-3xl font-normal;
+  }
+
+  h3 {
+    @apply text-2xl font-normal;
+  }
+
+  h4 {
+    @apply text-lg font-medium uppercase tracking-luxury;
+  }
+
+  p {
+    @apply text-base leading-relaxed text-noir-200;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16;
+  }
+
+  .btn-primary {
+    @apply bg-gold text-noir-950 px-8 py-3 font-medium uppercase tracking-luxury text-xs hover:bg-gold-400 transition-colors duration-300;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-noir-950 px-8 py-3 font-medium uppercase tracking-luxury text-xs hover:bg-noir-100 transition-colors duration-300;
+  }
+
+  .btn-outline {
+    @apply border border-white/40 text-white px-8 py-3 font-medium uppercase tracking-luxury text-xs hover:border-gold hover:text-gold transition-colors duration-300;
+  }
+
+  .card {
+    @apply bg-noir-900 border border-white/10 overflow-hidden hover:border-gold/40 transition-colors duration-300;
+  }
+
+  .eyebrow {
+    @apply text-gold text-xs uppercase tracking-luxury font-medium;
+  }
+}
