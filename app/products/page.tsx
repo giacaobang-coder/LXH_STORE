@@ -1,7 +1,6 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
+import { Suspense } from 'react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import ProductCard from '@/components/ProductCard'
@@ -22,7 +21,7 @@ interface Product {
 
 const PRODUCTS_PER_PAGE = 20
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const searchParams = useSearchParams()
   const category = searchParams.get('category')
   const subcategory = searchParams.get('subcategory')
@@ -199,5 +198,13 @@ export default function ProductsPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="container-custom py-12">Loading...</div>}>
+      <ProductsPageContent />
+    </Suspense>
   )
 }
