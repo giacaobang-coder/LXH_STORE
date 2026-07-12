@@ -4,7 +4,9 @@
  *
  *   npm run seed
  */
-import 'dotenv/config'
+import { config } from 'dotenv'
+config({ path: '.env.local' })
+
 import { getAdminDb } from '../src/server/firebase/admin'
 import { getMockProducts } from '../src/lib/mock-products'
 
